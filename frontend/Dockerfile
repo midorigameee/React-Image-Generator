@@ -35,9 +35,9 @@ RUN npm install
 COPY frontend/. .
 
 # 作業ディレクトリの権限の設定
-RUN chown -R devuser:devuser /home/devuser/workspace/frontend
+RUN chown -R devuser:devuser /home/devuser/
 
 # サーバー起動
-USER devuser
-EXPOSE 3000
-CMD ["npm", "run", "dev"]
+# USER devuser
+# EXPOSE 3000
+# CMD ["npm", "run", "dev"]

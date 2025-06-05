@@ -1,17 +1,16 @@
 {
-  "name": "react-fastapi-dev",
-  "dockerComposeFile": ["docker-compose.yml"],
-  "service": "frontend", // 開発対象コンテナによって変える(frontend or backend)
+  "name": "Access Frontend",
+  "dockerComposeFile": "../docker-compose_frontend.yml",
+  "service": "frontend",
   "workspaceFolder": "/home/devuser/workspace",
   "remoteUser": "devuser",
-  "forwardPorts": [3000],
+  "forwardPorts": [3000, 8000],
   "postStartCommand": "chown -R devuser:devuser /home/devuser/workspace",
   "overrideCommand": true,
-  "runArgs": ["sleep", "infinity"],
+  "postCreateCommand": "echo 'Frontend Ready. Run npm run dev manually.'",
   "customizations": {
     "vscode": {
       "extensions": [
-        // Web
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
         "stylelint.vscode-stylelint",
@@ -20,7 +19,6 @@
         "formulahendry.auto-rename-tag",
         "formulahendry.auto-close-tag",
         "astro-build.astro-vscode",
-        // General
         "yzhang.markdown-all-in-one"
       ],
       "settings": {

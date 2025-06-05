@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: frontend/Dockerfile
+    volumes:
+      - ..:/home/devuser/workspace
+      - node_modules:/home/devuser/workspace/frontend/node_modules
+    working_dir: /home/devuser/workspace/frontend
+    ports:
+      - "3000:3000"
+    command: ["npm", "run", "dev"]
+
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ..:/home/devuser/workspace
+    working_dir: /home/devuser/workspace/backend
+    ports:
+      - "8000:8000"
+    command: ["sleep", "infinity"]
+
+volumes:
+  node_modules:
