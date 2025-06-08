@@ -1,8 +1,9 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse
-from PIL import Image
-import io
 from fastapi.middleware.cors import CORSMiddleware
+import io
+from PIL import Image
+from . import image_editor
 
 app = FastAPI()
 
@@ -14,11 +15,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+
+
 @app.post("/upload-image")
 async def upload_image(file: UploadFile = File(...)):
-    image = Image.open(file.file).convert("L")  # グレースケールに変換
+    image = Image.open(file.file)
+    
+    exif = image_editor.extract_exif(image)
+    caption = image_editor.exif_dict_to_string(exif)
+    print(caption)
+    edited_image = image_editor.create_framed_image(image, caption)
+
     buffer = io.BytesIO()
-    image.save(buffer, format="PNG")
+    edited_image.save(buffer, format="PNG")
     buffer.seek(0)
     return StreamingResponse(buffer, media_type="image/png")
 
