@@ -25,7 +25,7 @@ const ImageUploader: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/upload-image",
+        import.meta.env.VITE_UPLOAD_IMAGE_API_URL,
         formData,
         {
           responseType: "blob",
