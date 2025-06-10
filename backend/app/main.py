@@ -5,14 +5,16 @@ import io, os
 from PIL import Image
 from . import image_editor
 
-app = FastAPI()
+
 ALLOW_ORIGIN = os.environ['ALLOW_ORIGIN']
-# ALLOW_ORIGIN = "http://localhost:3000"
+
+
+app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=["http://localhost:3000", ALLOW_ORIGIN],  # ReactのURL
-    allow_origins=["*"],  # ReactのURL
+    allow_origins=["http://localhost:3000", ALLOW_ORIGIN],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
