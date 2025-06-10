@@ -6,16 +6,16 @@ from PIL import Image
 from . import image_editor
 
 app = FastAPI()
+ALLOW_ORIGIN = os.environ['ALLOW_ORIGIN']
+# ALLOW_ORIGIN = "http://localhost:3000"
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # ReactのURL
+    allow_origins=["http://localhost:3000", ALLOW_ORIGIN],  # ReactのURL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
 
 
 @app.post("/upload-image")
