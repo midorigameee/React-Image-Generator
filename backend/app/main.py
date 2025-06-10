@@ -11,7 +11,8 @@ ALLOW_ORIGIN = os.environ['ALLOW_ORIGIN']
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", ALLOW_ORIGIN],  # ReactのURL
+    # allow_origins=["http://localhost:3000", ALLOW_ORIGIN],  # ReactのURL
+    allow_origins=["*"],  # ReactのURL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
