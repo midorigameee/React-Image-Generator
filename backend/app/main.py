@@ -5,12 +5,12 @@ import io, os
 from PIL import Image
 from . import image_editor
 
-
-ALLOW_ORIGIN = os.environ['ALLOW_ORIGIN']
-
+try:
+    ALLOW_ORIGIN = os.environ.get['ALLOW_ORIGIN']
+except:
+    ALLOW_ORIGIN = ""
 
 app = FastAPI()
-
 
 app.add_middleware(
     CORSMiddleware,
