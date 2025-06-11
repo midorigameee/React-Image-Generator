@@ -5,16 +5,23 @@ import io, os
 from PIL import Image
 from . import image_editor
 
+
+ALLOW_ORIGIN_LIST = ["http://localhost:3000"]
+
 try:
-    ALLOW_ORIGIN = os.environ.get['ALLOW_ORIGIN']
-except:
-    ALLOW_ORIGIN = ""
+    origin = os.environ.get('ALLOW_ORIGIN')
+    if origin:
+        ALLOW_ORIGIN_LIST.append(origin)
+    print(f"ALLOW_ORIGIN : {ALLOW_ORIGIN_LIST}")
+except Exception as e:
+    print("ALLOW_ORIGIN is not found.")
+    print(e)
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", ALLOW_ORIGIN],
+    allow_origins=ALLOW_ORIGIN_LIST,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
