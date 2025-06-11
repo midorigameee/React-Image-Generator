@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./ImageUploader.css";
+import { resizeImageWithExif } from "../utils/imageUtils";
 
 const ImageUploader: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -24,6 +25,11 @@ const ImageUploader: React.FC = () => {
     setStatusMessage("画像を処理中です…");
 
     try {
+      const resizedBlob = await resizeImageWithExif(selectedFile);
+
+      const formData = new FormData();
+      formData.append("file", resizedBlob, selectedFile.name);
+
       const response = await axios.post(
         import.meta.env.VITE_UPLOAD_IMAGE_API_URL,
         formData,
