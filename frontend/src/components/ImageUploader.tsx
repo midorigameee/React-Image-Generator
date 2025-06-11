@@ -67,7 +67,6 @@ const ImageUploader: React.FC = () => {
 
   return (
     <div className="uploader-container">
-      <h1>画像をアップロードする</h1>
       <input type="file" accept="image/*" onChange={handleFileChange} />
       <button onClick={handleUpload} disabled={!selectedFile}>
         アップロード

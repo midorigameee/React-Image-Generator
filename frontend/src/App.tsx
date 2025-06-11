@@ -1,10 +1,14 @@
 import "./App.css";
 import ImageUploader from "./components/ImageUploader";
+import Titel from "./components/Title";
 
 function App() {
   return (
     <>
-      <ImageUploader />
+      <div className="app-container">
+        <Titel />
+        <ImageUploader />
+      </div>
     </>
   );
 }
