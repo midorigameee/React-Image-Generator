@@ -10,7 +10,16 @@ const ImageUploader: React.FC = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
+      const file = event.target.files[0];
+
+      // JPEG かどうかをチェック
+      if (file.type !== "image/jpeg" && file.type !== "image/jpg") {
+        setStatusMessage("JPEG画像（.jpg / .jpeg）のみアップロードできます。");
+        setSelectedFile(null);
+        return;
+      }
+
+      setSelectedFile(file);
       setProcessedImage(null); // 新しくファイルを選択したら過去の画像はリセット
       setStatusMessage(""); // ステータスメッセージもリセット
     }
@@ -18,6 +27,15 @@ const ImageUploader: React.FC = () => {
 
   const handleUpload = async () => {
     if (!selectedFile) return;
+
+    // 念のため再チェック（セキュリティ対策）
+    if (
+      selectedFile.type !== "image/jpeg" &&
+      selectedFile.type !== "image/jpg"
+    ) {
+      setStatusMessage("JPEG画像（.jpg / .jpeg）のみアップロードできます。");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("file", selectedFile);
