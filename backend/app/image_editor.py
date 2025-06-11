@@ -1,10 +1,11 @@
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ExifTags import TAGS
 import os
+from datetime import datetime
 
-FRAME_WIDTH_RATE = 0.00  # フレームは画像の10%の余白を残す
 
 def resize_image_with_aspect_ratio(image: Image.Image) -> Image.Image:
+    FRAME_WIDTH_RATE = 0.00  # フレームは画像の10%の余白を残す
     original_width, original_height = image.size
 
     if original_height > original_width:
@@ -145,7 +146,10 @@ def exif_dict_to_string(exif: dict) -> str:
 
     # 日付
     if "DateTime" in exif:
-        lines.append(f"Shot on : {exif['DateTime']}")
+        original_str = exif['DateTime']
+        dt = datetime.strptime(original_str, "%Y:%m:%d %H:%M:%S")
+        formatted_str = dt.strftime("%Y/%m/%d")
+        lines.append(f"Shot on {formatted_str}")
 
 
     # カメラ
