@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./ImageUploader.css";
 import { resizeImageWithExif } from "../utils/imageUtils";
+import ToggleSwitch from "./ToggleSwitch";
 
 const ImageUploader: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -66,18 +67,17 @@ const ImageUploader: React.FC = () => {
 
   return (
     <div className="uploader-container">
-      <label>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
-        <input
-          type="checkbox"
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+      <div className="upload-controls">
+        <ToggleSwitch
           checked={showExif}
-          onChange={(e) => setShowExif(e.target.checked)}
+          onChange={(checked) => setShowExif(checked)}
+          label="Exif情報"
         />
-        Exif情報
-      </label>
-      <button onClick={handleUpload} disabled={!selectedFile}>
-        アップロード
-      </button>
+        <button onClick={handleUpload} disabled={!selectedFile}>
+          アップロード
+        </button>
+      </div>
 
       {/* ステータスメッセージ */}
       {statusMessage && <p>{statusMessage}</p>}

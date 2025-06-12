@@ -29,3 +29,11 @@ button {
   border: none;
   border-radius: 0;
 }
+
+.upload-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap; /* 画面が狭いとき折り返し */
+  justify-content: center; /* 横中央寄せ */
+}
