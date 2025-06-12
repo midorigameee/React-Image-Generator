@@ -72,9 +72,12 @@ const ImageUploader: React.FC = () => {
         <ToggleSwitch
           checked={showExif}
           onChange={(checked) => setShowExif(checked)}
-          label="Exif情報"
         />
-        <button onClick={handleUpload} disabled={!selectedFile}>
+        <button
+          className="upload-button"
+          onClick={handleUpload}
+          disabled={!selectedFile}
+        >
           アップロード
         </button>
       </div>

@@ -3,7 +3,7 @@ import "./Title.css";
 const Titel = () => {
   return (
     <>
-      <h1 className="title">Image creator</h1>
+      <h1 className="title">Image generator</h1>
     </>
   );
 };

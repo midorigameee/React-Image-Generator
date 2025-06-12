@@ -7,21 +7,19 @@ interface ToggleSwitchProps {
   label?: string;
 }
 
-const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
-  checked,
-  onChange,
-  label,
-}) => {
+const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ checked, onChange }) => {
   return (
-    <label className="toggle-switch">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-      />
-      <span className="slider" />
-      {label && <span className="label-text">{label}</span>}
-    </label>
+    <div className="toggle-wrapper">
+      <label className="toggle-label">Exif情報</label>
+      <label className="toggle-switch">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        <span className="toggle-slider" />
+      </label>
+    </div>
   );
 };
 

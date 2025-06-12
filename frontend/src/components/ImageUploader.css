@@ -33,7 +33,26 @@ button {
 .upload-controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 3rem;
   flex-wrap: wrap; /* 画面が狭いとき折り返し */
   justify-content: center; /* 横中央寄せ */
+}
+
+.upload-button {
+  margin: auto 0;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  height: 36px;
+  line-height: 1;
+  border: none;
+  border-radius: 6px;
+  background-color: #4f5bd5;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.upload-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
