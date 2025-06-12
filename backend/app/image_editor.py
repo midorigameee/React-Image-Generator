@@ -4,18 +4,16 @@ import os
 from datetime import datetime
 
 
-def resize_image_with_aspect_ratio(image: Image.Image) -> Image.Image:
+def resize_image_with_aspect_ratio(image: Image.Image, new_width: int, new_height: int) -> Image.Image:
     FRAME_WIDTH_RATE = 0.00  # フレームは画像の10%の余白を残す
     original_width, original_height = image.size
 
     if original_height > original_width:
-        # 縦長 → 高さを1350に固定
-        new_height = int(1350 * (1 - FRAME_WIDTH_RATE))
+        # 縦長の場合、縦幅を基準にサイズ変更する
         ratio = new_height / original_height
         new_width = int(original_width * ratio)
     else:
-        # 横長または正方形 → 幅を1080に固定
-        new_width = int(1080 * (1 - FRAME_WIDTH_RATE))
+        # 横長または正方形の場合、横幅を基準にサイズ変更する
         ratio = new_width / original_width
         new_height = int(original_height * ratio)
 
@@ -34,7 +32,7 @@ def create_framed_image(image: Image.Image, caption: str) -> Image.Image:
     frame = Image.new("RGB", (frame_width, frame_height), color=(255, 255, 255))
 
     # 元画像を縮小（10%の余白を残す）
-    resized_image = resize_image_with_aspect_ratio(image)
+    resized_image = resize_image_with_aspect_ratio(image, frame_width, image_area_height)
 
     # 画像をフレーム内の画像エリアに配置（中央寄せ）
     img_x = (frame_width - resized_image.width) // 2
@@ -150,7 +148,6 @@ def exif_dict_to_string(exif: dict) -> str:
         dt = datetime.strptime(original_str, "%Y:%m:%d %H:%M:%S")
         formatted_str = dt.strftime("%Y/%m/%d")
         lines.append(f"Shot on {formatted_str}")
-
 
     # カメラ
     camera_info = []
