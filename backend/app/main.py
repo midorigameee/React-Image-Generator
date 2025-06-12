@@ -1,9 +1,10 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import io, os
 from PIL import Image
 from . import image_editor
+from typing import Annotated
 
 
 ALLOW_ORIGIN_LIST = ["http://localhost:3000"]
@@ -29,13 +30,18 @@ app.add_middleware(
 
 
 @app.post("/upload-image")
-async def upload_image(file: UploadFile = File(...)):
+async def upload_image(
+        file: UploadFile = File(...),
+        show_exif: str = Form("true")  # ← str型で受け取る
+    ):
+    show_exif_flag = show_exif.lower() == "true"
+
     image = Image.open(file.file)
     
-    exif = image_editor.extract_exif(image)
-    caption = image_editor.exif_dict_to_string(exif)
-    print(caption)
-    edited_image = image_editor.create_framed_image(image, caption)
+    if show_exif_flag:
+        edited_image = image_editor.create_framed_image_with_exif(image)
+    else:
+        edited_image = image_editor.create_framed_image(image)
 
     buffer = io.BytesIO()
     edited_image.save(buffer, format="PNG")

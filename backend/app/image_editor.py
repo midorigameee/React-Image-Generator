@@ -21,7 +21,32 @@ def resize_image_with_aspect_ratio(image: Image.Image, new_width: int, new_heigh
     return resized_image
 
 
-def create_framed_image(image: Image.Image, caption: str) -> Image.Image:
+def draw_image_area_on_frame(image, image_area_height, frame, frame_width, frame_height):
+    # 元画像を縮小
+    resized_image = resize_image_with_aspect_ratio(image, frame_width, image_area_height)
+
+    # 画像をフレーム内の画像エリアに配置（中央寄せ）
+    img_x = (frame_width - resized_image.width) // 2
+    img_y = (image_area_height - resized_image.height) // 2
+    frame.paste(resized_image, (img_x, img_y))
+
+
+def create_framed_image(image: Image.Image) -> Image.Image:
+    # フレーム全体のサイズ
+    frame_width = 1080
+    frame_height = 1350
+    image_area_height = 1350
+
+    # 新しい背景画像（白背景）
+    frame = Image.new("RGB", (frame_width, frame_height), color=(255, 255, 255))
+
+    # フレームに画像を描画
+    draw_image_area_on_frame(image, image_area_height, frame, frame_width, frame_height)
+
+    return frame
+
+
+def create_framed_image_with_exif(image: Image.Image) -> Image.Image:
     # フレーム全体のサイズ
     frame_width = 1080
     frame_height = 1350
@@ -31,13 +56,13 @@ def create_framed_image(image: Image.Image, caption: str) -> Image.Image:
     # 新しい背景画像（白背景）
     frame = Image.new("RGB", (frame_width, frame_height), color=(255, 255, 255))
 
-    # 元画像を縮小（10%の余白を残す）
-    resized_image = resize_image_with_aspect_ratio(image, frame_width, image_area_height)
+    # フレームに画像を描画
+    draw_image_area_on_frame(image, image_area_height, frame, frame_width, frame_height)
 
-    # 画像をフレーム内の画像エリアに配置（中央寄せ）
-    img_x = (frame_width - resized_image.width) // 2
-    img_y = (image_area_height - resized_image.height) // 2
-    frame.paste(resized_image, (img_x, img_y))
+    # Exif情報の抽出
+    exif = extract_exif(image)
+    caption = exif_dict_to_string(exif)
+    print(caption)
 
     # テキスト描画
     draw = ImageDraw.Draw(frame)

@@ -7,6 +7,7 @@ const ImageUploader: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [processedImage, setProcessedImage] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string>("");
+  const [showExif, setShowExif] = useState<boolean>(true);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -37,9 +38,6 @@ const ImageUploader: React.FC = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
     setStatusMessage("画像を処理中です…");
 
     try {
@@ -47,6 +45,7 @@ const ImageUploader: React.FC = () => {
 
       const formData = new FormData();
       formData.append("file", resizedBlob, selectedFile.name);
+      formData.append("show_exif", String(showExif)); // "true" または "false"
 
       const response = await axios.post(
         import.meta.env.VITE_UPLOAD_IMAGE_API_URL,
@@ -67,7 +66,15 @@ const ImageUploader: React.FC = () => {
 
   return (
     <div className="uploader-container">
-      <input type="file" accept="image/*" onChange={handleFileChange} />
+      <label>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <input
+          type="checkbox"
+          checked={showExif}
+          onChange={(e) => setShowExif(e.target.checked)}
+        />
+        Exif情報
+      </label>
       <button onClick={handleUpload} disabled={!selectedFile}>
         アップロード
       </button>
