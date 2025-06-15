@@ -1,5 +1,60 @@
 import piexif from "piexifjs";
 
+type ExifData = {
+  Model: string;
+  LensModel: string;
+  DateTime: string;
+};
+
+function parseLensInfo(lensInfo: any): string {
+  if (!Array.isArray(lensInfo) || lensInfo.length < 2) return "";
+
+  const [minFocal, maxFocal] = lensInfo;
+
+  const min =
+    Array.isArray(minFocal) && minFocal.length === 2
+      ? minFocal[0] / (minFocal[1] || 1)
+      : 0;
+
+  const max =
+    Array.isArray(maxFocal) && maxFocal.length === 2
+      ? maxFocal[0] / (maxFocal[1] || 1)
+      : 0;
+
+  if (min === max) return `${min}mm`;
+  return `${min}-${max}mm`;
+}
+
+export const extractExifDataFromFile = async (
+  file: File
+): Promise<ExifData | null> => {
+  if (!file || !file.type.includes("jpeg")) {
+    console.warn("JPEGファイル以外は処理できません");
+    return null;
+  }
+
+  const buffer = await file.arrayBuffer();
+  const binaryStr = new Uint8Array(buffer).reduce(
+    (acc, b) => acc + String.fromCharCode(b),
+    ""
+  );
+
+  try {
+    const exifObj = piexif.load(binaryStr);
+
+    return {
+      Model: exifObj["0th"][piexif.ImageIFD.Model] || "",
+      LensModel:
+        exifObj["Exif"][piexif.ExifIFD.LensModel]?.replace(/\0/g, "").trim() ||
+        "",
+      DateTime: exifObj["0th"][piexif.ImageIFD.DateTime] || "",
+    };
+  } catch (error) {
+    console.error("Exif情報の取得に失敗しました:", error);
+    return null;
+  }
+};
+
 /**
  * 画像ファイルを読み込み、必要に応じて縦長を1350pxまたは1080pxに縮小し、EXIF付きで返す
  */

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./ImageUploader.css";
-import { resizeImageWithExif } from "../utils/imageUtils";
+import {
+  resizeImageWithExif,
+  extractExifDataFromFile,
+} from "../utils/imageUtils";
 import ToggleSwitch from "./ToggleSwitch";
 
 const ImageUploader: React.FC = () => {
@@ -9,8 +12,13 @@ const ImageUploader: React.FC = () => {
   const [processedImage, setProcessedImage] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [showExif, setShowExif] = useState<boolean>(true);
+  const [exifData, setExifData] = useState<any>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  console.log(exifData);
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
 
@@ -19,6 +27,11 @@ const ImageUploader: React.FC = () => {
         setStatusMessage("JPEG画像（.jpg / .jpeg）のみアップロードできます。");
         setSelectedFile(null);
         return;
+      }
+
+      const exif = await extractExifDataFromFile(file);
+      if (exif) {
+        setExifData(exif);
       }
 
       setSelectedFile(file);
@@ -47,6 +60,7 @@ const ImageUploader: React.FC = () => {
       const formData = new FormData();
       formData.append("file", resizedBlob, selectedFile.name);
       formData.append("show_exif", String(showExif)); // "true" または "false"
+      formData.append("exif", JSON.stringify(exifData));
 
       const response = await axios.post(
         import.meta.env.VITE_UPLOAD_IMAGE_API_URL,
@@ -81,6 +95,42 @@ const ImageUploader: React.FC = () => {
           アップロード
         </button>
       </div>
+
+      {/* あとでコンポーネント化する */}
+      {exifData && (
+        <div className="exif-editor">
+          <label>
+            カメラモデル（Model）:
+            <input
+              type="text"
+              value={exifData.Model}
+              onChange={(e) =>
+                setExifData({ ...exifData, Model: e.target.value })
+              }
+            />
+          </label>
+          <label>
+            レンズ（LensModel）:
+            <input
+              type="text"
+              value={exifData.LensModel}
+              onChange={(e) =>
+                setExifData({ ...exifData, LensModel: e.target.value })
+              }
+            />
+          </label>
+          <label>
+            撮影日時（DateTime）:
+            <input
+              type="text"
+              value={exifData.DateTime}
+              onChange={(e) =>
+                setExifData({ ...exifData, DateTime: e.target.value })
+              }
+            />
+          </label>
+        </div>
+      )}
 
       {/* ステータスメッセージ */}
       {statusMessage && <p>{statusMessage}</p>}
