@@ -1,11 +1,5 @@
 import piexif from "piexifjs";
 
-type ExifData = {
-  Model: string;
-  LensModel: string;
-  DateTime: string;
-};
-
 function parseLensInfo(lensInfo: any): string {
   if (!Array.isArray(lensInfo) || lensInfo.length < 2) return "";
 

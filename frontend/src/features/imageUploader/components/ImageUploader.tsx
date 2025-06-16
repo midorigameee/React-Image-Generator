@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./ImageUploader.css";
-import {
-  resizeImageWithExif,
-  extractExifDataFromFile,
-} from "../utils/imageUtils";
-import ToggleSwitch from "./ToggleSwitch";
+import { resizeImageWithExif, extractExifDataFromFile } from "../imageUtils";
+import ToggleSwitch from "../../../components/ToggleSwitch";
+import UploadButton from "./UploadButton";
+import FileSelectForm from "./FileSelectForm";
+import ShowExifIInfo from "./ShowExifIInfo";
 
-const ImageUploader: React.FC = () => {
+type Props = {
+  setStatusMessage: React.Dispatch<React.SetStateAction<string>>;
+  setProcessedImage: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+const ImageUploader: React.FC<Props> = ({
+  setStatusMessage,
+  setProcessedImage,
+}) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [processedImage, setProcessedImage] = useState<string | null>(null);
-  const [statusMessage, setStatusMessage] = useState<string>("");
   const [showExif, setShowExif] = useState<boolean>(true);
   const [exifData, setExifData] = useState<any>(null);
 
@@ -81,65 +87,21 @@ const ImageUploader: React.FC = () => {
 
   return (
     <div className="uploader-container">
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      <div className="upload-controls">
+      <div className="form-item">
+        <FileSelectForm handleFileChange={handleFileChange} />
+        <UploadButton handleUpload={handleUpload} selectedFile={selectedFile} />
+      </div>
+      <div className="toggle-item">
         <ToggleSwitch
           checked={showExif}
           onChange={(checked) => setShowExif(checked)}
         />
-        <button
-          className="upload-button"
-          onClick={handleUpload}
-          disabled={!selectedFile}
-        >
-          アップロード
-        </button>
       </div>
-
-      {/* あとでコンポーネント化する */}
-      {exifData && (
-        <div className="exif-editor">
-          <label>
-            カメラモデル（Model）:
-            <input
-              type="text"
-              value={exifData.Model}
-              onChange={(e) =>
-                setExifData({ ...exifData, Model: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            レンズ（LensModel）:
-            <input
-              type="text"
-              value={exifData.LensModel}
-              onChange={(e) =>
-                setExifData({ ...exifData, LensModel: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            撮影日時（DateTime）:
-            <input
-              type="text"
-              value={exifData.DateTime}
-              onChange={(e) =>
-                setExifData({ ...exifData, DateTime: e.target.value })
-              }
-            />
-          </label>
-        </div>
-      )}
-
-      {/* ステータスメッセージ */}
-      {statusMessage && <p>{statusMessage}</p>}
-
-      {processedImage && (
-        <div className="image-preview">
-          <img src={processedImage} alt="Processed" />
-        </div>
-      )}
+      <ShowExifIInfo
+        showExif={showExif}
+        exifData={exifData}
+        setExifData={setExifData}
+      />
     </div>
   );
 };
