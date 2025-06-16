@@ -8,7 +8,7 @@ import FileSelectForm from "./FileSelectForm";
 import ShowExifIInfo from "./ShowExifIInfo";
 
 type Props = {
-  setStatusMessage: React.Dispatch<React.SetStateAction<string>>;
+  setStatusMessage: React.Dispatch<React.SetStateAction<string | null>>;
   setProcessedImage: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
