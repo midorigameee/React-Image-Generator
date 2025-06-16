@@ -1,13 +1,22 @@
 import "./App.css";
-import ImageUploader from "./components/ImageUploader";
+import ImageUploader from "./features/imageUploader/components/ImageUploader";
 import Titel from "./components/Title";
+import Viewer from "./components/Viewer";
+import { useState } from "react";
 
 function App() {
+  const [processedImage, setProcessedImage] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string>("");
+
   return (
     <>
       <div className="app-container">
         <Titel />
-        <ImageUploader />
+        <ImageUploader
+          setProcessedImage={setProcessedImage}
+          setStatusMessage={setStatusMessage}
+        />
+        <Viewer statusMessage={statusMessage} processedImage={processedImage} />
       </div>
     </>
   );

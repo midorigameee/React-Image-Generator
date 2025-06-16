@@ -1,1 +1,0 @@
-import piexif from "piexifjs";
