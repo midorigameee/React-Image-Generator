@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "./ImageUploader.css";
-import { resizeImageWithExif, extractExifDataFromFile } from "../imageUtils";
+import { extractExifDataFromFile } from "../imageUtils";
 import ToggleSwitch from "../../../components/ToggleSwitch";
 import UploadButton from "./UploadButton";
 import FileSelectForm from "./FileSelectForm";
@@ -46,50 +45,17 @@ const ImageUploader: React.FC<Props> = ({
     }
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile) return;
-
-    // 念のため再チェック（セキュリティ対策）
-    if (
-      selectedFile.type !== "image/jpeg" &&
-      selectedFile.type !== "image/jpg"
-    ) {
-      setStatusMessage("JPEG画像（.jpg / .jpeg）のみアップロードできます。");
-      return;
-    }
-
-    setStatusMessage("画像を処理中です…");
-
-    try {
-      const resizedBlob = await resizeImageWithExif(selectedFile);
-
-      const formData = new FormData();
-      formData.append("file", resizedBlob, selectedFile.name);
-      formData.append("show_exif", String(showExif)); // "true" または "false"
-      formData.append("exif", JSON.stringify(exifData));
-
-      const response = await axios.post(
-        import.meta.env.VITE_UPLOAD_IMAGE_API_URL,
-        formData,
-        {
-          responseType: "blob",
-        }
-      );
-
-      const imageUrl = URL.createObjectURL(response.data);
-      setProcessedImage(imageUrl);
-      setStatusMessage("フレーム画像を作成しました");
-    } catch (error) {
-      console.error("画像アップロードに失敗しました:", error);
-      setStatusMessage("画像アップロードに失敗しました");
-    }
-  };
-
   return (
     <div className="uploader-container">
       <div className="form-item">
         <FileSelectForm handleFileChange={handleFileChange} />
-        <UploadButton handleUpload={handleUpload} selectedFile={selectedFile} />
+        <UploadButton
+          selectedFile={selectedFile}
+          showExif={showExif}
+          exifData={exifData}
+          setStatusMessage={setStatusMessage}
+          setProcessedImage={setProcessedImage}
+        />
       </div>
       <div className="toggle-item">
         <ToggleSwitch
