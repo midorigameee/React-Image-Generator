@@ -40,6 +40,7 @@ const ImageUploader: React.FC<Props> = ({
       </div>
       <div className="toggle-item">
         <ToggleSwitch
+          name="Exif情報"
           checked={showExif}
           onChange={(checked) => setShowExif(checked)}
         />

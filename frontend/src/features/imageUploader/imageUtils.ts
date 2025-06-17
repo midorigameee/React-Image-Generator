@@ -1,23 +1,5 @@
 import piexif from "piexifjs";
-
-function parseLensInfo(lensInfo: any): string {
-  if (!Array.isArray(lensInfo) || lensInfo.length < 2) return "";
-
-  const [minFocal, maxFocal] = lensInfo;
-
-  const min =
-    Array.isArray(minFocal) && minFocal.length === 2
-      ? minFocal[0] / (minFocal[1] || 1)
-      : 0;
-
-  const max =
-    Array.isArray(maxFocal) && maxFocal.length === 2
-      ? maxFocal[0] / (maxFocal[1] || 1)
-      : 0;
-
-  if (min === max) return `${min}mm`;
-  return `${min}-${max}mm`;
-}
+import type { ExifData } from "./types";
 
 export const extractExifDataFromFile = async (
   file: File
@@ -60,7 +42,7 @@ export const resizeImageWithExif = async (file: File): Promise<File> => {
   const image = await loadImage(dataUrl);
 
   // 縦の長さに応じて縮小処理
-  let { width, height } = image;
+  const { width, height } = image;
   let maxHeight: number | null = null;
 
   if (height > 1350) {

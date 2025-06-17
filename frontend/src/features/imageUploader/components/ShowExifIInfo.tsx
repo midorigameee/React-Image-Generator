@@ -1,6 +1,15 @@
-import React from "react";
+// import React, { useEffect, useState } from "react";
 import type { ExifData } from "../types";
 import "./ShowExifIInfo.css";
+// import Dropdown from "../../../components/Dropdown";
+// import {
+//   formatFNumber,
+//   formatExposureTime,
+//   formatISO,
+//   apertureOptions,
+//   shutterSpeedOptions,
+//   isoOptions,
+// } from "../exifUtils";
 
 type Props = {
   showExif: boolean;
@@ -13,6 +22,19 @@ const ShowExifIInfo: React.FC<Props> = ({
   exifData,
   setExifData,
 }) => {
+  // const [aperture, setAperture] = useState("");
+  // const [shutterSpeed, setShutterSpeed] = useState("");
+  // const [iso, setIso] = useState("");
+
+  // exifDataが更新されたら、Dropdown初期値に反映
+  // useEffect(() => {
+  //   if (exifData) {
+  //     setAperture(formatFNumber(exifData.FNumber));
+  //     setShutterSpeed(formatExposureTime(exifData.ExposureTime));
+  //     setIso(formatISO(exifData.ISOSpeedRatings));
+  //   }
+  // }, [exifData]);
+
   return (
     <>
       {showExif && exifData && (
@@ -47,6 +69,26 @@ const ShowExifIInfo: React.FC<Props> = ({
               }
             />
           </div>
+          {/* <div>
+            <Dropdown
+              label="F値"
+              options={apertureOptions}
+              value={aperture}
+              onChange={setAperture}
+            />
+            <Dropdown
+              label="SS"
+              options={shutterSpeedOptions}
+              value={shutterSpeed}
+              onChange={setShutterSpeed}
+            />
+            <Dropdown
+              label="ISO"
+              options={isoOptions}
+              value={iso}
+              onChange={setIso}
+            />
+          </div> */}
         </div>
       )}
     </>
