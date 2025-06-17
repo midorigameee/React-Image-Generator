@@ -6,7 +6,7 @@ import { useState } from "react";
 
 function App() {
   const [processedImage, setProcessedImage] = useState<string | null>(null);
-  const [statusMessage, setStatusMessage] = useState<string>("");
+  const [statusMessage, setStatusMessage] = useState<string | null>("");
 
   return (
     <>

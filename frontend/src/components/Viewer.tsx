@@ -2,7 +2,7 @@ import React from "react";
 import "./Viewer.css";
 
 type Props = {
-  statusMessage: string;
+  statusMessage: string | null;
   processedImage: string | null;
 };
 
