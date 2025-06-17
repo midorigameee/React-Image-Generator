@@ -1,10 +1,11 @@
 from PIL import Image
 from .image_drawer import draw_image_area_on_frame
-from .text_drawer import draw_test_area_on_frame
-from .exif_utils import extract_exif
+from .text_drawer import draw_text_area_on_frame
+from .exif_utils import prepare_exif
+from .types import ReqExif
 
 
-def create_framed_image(image: Image.Image, is_use_exif: bool) -> Image.Image:
+def create_framed_image(image: Image.Image, is_use_exif: bool, exif_from_req: ReqExif) -> Image.Image:
     # フレーム全体のサイズ
     frame_width = 1080
     frame_height = 1350
@@ -22,8 +23,9 @@ def create_framed_image(image: Image.Image, is_use_exif: bool) -> Image.Image:
     draw_image_area_on_frame(image, image_area_height, frame, frame_width, frame_height)
 
     if is_use_exif:
-        exif = extract_exif(image)
+        exif = prepare_exif(image, exif_from_req)
+
         print(exif)
-        draw_test_area_on_frame(frame, exif)
+        draw_text_area_on_frame(frame, exif)
 
     return frame

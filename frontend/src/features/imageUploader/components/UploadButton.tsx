@@ -5,7 +5,6 @@ import "./UploadButton.css";
 import { resizeImageWithExif } from "../imageUtils";
 
 type Props = {
-  // handleUpload: () => Promise<void>;
   selectedFile: File | null;
   showExif: boolean;
   exifData: ExifData | null;
