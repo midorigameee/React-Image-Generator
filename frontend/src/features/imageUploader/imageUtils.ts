@@ -1,4 +1,35 @@
 import piexif from "piexifjs";
+import type { ExifData } from "./types";
+
+export const extractExifDataFromFile = async (
+  file: File
+): Promise<ExifData | null> => {
+  if (!file || !file.type.includes("jpeg")) {
+    console.warn("JPEGファイル以外は処理できません");
+    return null;
+  }
+
+  const buffer = await file.arrayBuffer();
+  const binaryStr = new Uint8Array(buffer).reduce(
+    (acc, b) => acc + String.fromCharCode(b),
+    ""
+  );
+
+  try {
+    const exifObj = piexif.load(binaryStr);
+
+    return {
+      Model: exifObj["0th"][piexif.ImageIFD.Model] || "",
+      LensModel:
+        exifObj["Exif"][piexif.ExifIFD.LensModel]?.replace(/\0/g, "").trim() ||
+        "",
+      DateTime: exifObj["0th"][piexif.ImageIFD.DateTime] || "",
+    };
+  } catch (error) {
+    console.error("Exif情報の取得に失敗しました:", error);
+    return null;
+  }
+};
 
 /**
  * 画像ファイルを読み込み、必要に応じて縦長を1350pxまたは1080pxに縮小し、EXIF付きで返す
@@ -11,7 +42,7 @@ export const resizeImageWithExif = async (file: File): Promise<File> => {
   const image = await loadImage(dataUrl);
 
   // 縦の長さに応じて縮小処理
-  let { width, height } = image;
+  const { width, height } = image;
   let maxHeight: number | null = null;
 
   if (height > 1350) {

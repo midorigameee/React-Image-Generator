@@ -1,10 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 declare module "piexifjs" {
-  const piexif: {
-    load: (jpegData: string) => any;
-    dump: (exifObj: any) => string;
-    insert: (exifStr: string, jpegData: string) => string;
-    remove: (jpegData: string) => string;
-    TAGS: any;
+  export const ImageIFD: {
+    Model: number;
+    DateTime: number;
   };
-  export default piexif;
+
+  export const ExifIFD: {
+    LensModel: number;
+  };
+
+  export function load(jpegData: string): any;
+  export function dump(exifObj: any): string;
+  export function insert(exifStr: string, jpegData: string): string;
+  export function remove(jpegData: string): string;
 }

@@ -15,7 +15,7 @@ def get_font() -> ImageFont.FreeTypeFont:
     return font
 
 
-def draw_test_area_on_frame(frame, caption):
+def draw_text_area_on_frame(frame, caption):
     # テキスト描画
     draw = ImageDraw.Draw(frame)
     lines = caption.strip().split('\n')

@@ -2,15 +2,20 @@ import React from "react";
 import "./ToggleSwitch.css";
 
 interface ToggleSwitchProps {
+  name: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
 }
 
-const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ checked, onChange }) => {
+const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
+  name,
+  checked,
+  onChange,
+}) => {
   return (
     <div className="toggle-wrapper">
-      <label className="toggle-label">Exif情報</label>
+      <label className="toggle-label">{name}</label>
       <label className="toggle-switch">
         <input
           type="checkbox"

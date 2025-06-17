@@ -1,7 +1,7 @@
 from PIL import Image
 from PIL.ExifTags import TAGS
 from datetime import datetime
-
+from .types import ReqExif
 
 def closest_shutter_speed(value):
     # 一般的なシャッタースピードの分母リスト
@@ -32,7 +32,7 @@ def format_exif_value(tag, value):
         return value
 
 
-def extract_exif(image: Image.Image) -> str:
+def prepare_exif(image: Image.Image, exif_from_req: ReqExif) -> str:
     wanted_tags  = ["Model", "DateTime", "FNumber", "ExposureTime", "ISOSpeedRatings", "FocalLength", "LensModel"]
     exif_dict = {}
 
@@ -48,6 +48,9 @@ def extract_exif(image: Image.Image) -> str:
     else:
         print("EXIF情報がありません")
 
+    # ブラウザから入力されたexifを優先させる
+    exif_dict = merge_exif(exif_dict, exif_from_req)
+
     return exif_dict_to_string(exif_dict)
 
 
@@ -56,10 +59,14 @@ def exif_dict_to_string(exif: dict) -> str:
 
     # 日付
     if "DateTime" in exif:
-        original_str = exif['DateTime']
-        dt = datetime.strptime(original_str, "%Y:%m:%d %H:%M:%S")
-        formatted_str = dt.strftime("%Y/%m/%d")
-        lines.append(f"Shot on {formatted_str}")
+        try:
+            original_str = exif['DateTime']
+            dt = datetime.strptime(original_str, "%Y:%m:%d %H:%M:%S")
+            formatted_str = dt.strftime("%Y/%m/%d")
+            lines.append(f"Shot on {formatted_str}")
+        except Exception as e:
+            print("入力された日付が不正です。")
+            lines.append(f"Shot on ...")
 
     # カメラ
     camera_info = []
@@ -84,3 +91,16 @@ def exif_dict_to_string(exif: dict) -> str:
         lines.append("     ".join(capture_info))
 
     return "\n".join(lines)
+
+
+def merge_exif(exif, req_exif):
+    if req_exif.Model != "":
+        exif["Model"] = req_exif.Model
+
+    if req_exif.LensModel != "":
+        exif["LensModel"] = req_exif.LensModel
+
+    if req_exif.Model != "":
+        exif["DateTime"] = req_exif.DateTime
+
+    return exif
