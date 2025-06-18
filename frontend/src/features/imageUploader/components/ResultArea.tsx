@@ -10,7 +10,7 @@ type Props = {
 };
 
 const Viewer: React.FC<Props> = ({ statusMessage, processedImage }) => {
-  const captionRaw = "#nikon \\n#nikonzf \\n#nikkorz40mmf2 #";
+  const captionRaw = "#nikon \\n#nikonzf \\n#nikkorz40mmf2";
   const caption = captionRaw.replace(/\\n/g, "\n");
 
   return (
