@@ -1,25 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import "./CopyText.css";
 
 type Props = {
-  text: string;
+  caption: string | null;
 };
 
-const CopyText: React.FC<Props> = ({ text }) => {
+const CopyText: React.FC<Props> = ({ caption }) => {
+  useEffect(() => {
+    console.log("受け取ったキャプション:", caption);
+  }, [caption]);
+
   const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast.success("キャプションをコピーしました！");
-    } catch (err) {
-      console.error("コピーに失敗しました:", err);
-      toast.error("コピーに失敗しました");
+    if (caption) {
+      try {
+        await navigator.clipboard.writeText(caption);
+        toast.success("キャプションをコピーしました！");
+      } catch (err) {
+        console.error("コピーに失敗しました:", err);
+        toast.error("コピーに失敗しました");
+      }
     }
   };
 
+  console.log(`text : ${caption}`);
+
   return (
     <div className="caption-box">
-      <textarea className="caption-text" value={text} readOnly />
+      <textarea className="caption-text" value={caption ?? ""} readOnly />
       <button className="caption-copy-button" onClick={handleCopy}>
         コピー
       </button>

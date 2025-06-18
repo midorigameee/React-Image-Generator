@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.endpoints import upload
+from app.api.v1.endpoints import generate_caption
 from app.core.config import get_allow_origin_list
 
 
@@ -15,6 +16,7 @@ app.add_middleware(
 )
 
 app.include_router(upload.router, prefix="/v1")
+app.include_router(generate_caption.router, prefix="/v1")
 
 @app.get("/")
 def read_root():

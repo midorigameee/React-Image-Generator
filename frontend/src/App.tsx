@@ -1,14 +1,15 @@
 import "./App.css";
 import ImageUploader from "./features/imageUploader/components/ImageUploader";
 import Titel from "./components/Title";
-import Viewer from "./features/imageUploader/components/ResultArea";
+import ResultArea from "./features/imageUploader/components/ResultArea";
 import { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
 function App() {
-  const [processedImage, setProcessedImage] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>("");
+  const [processedImage, setProcessedImage] = useState<string | null>(null);
+  const [caption, setCaption] = useState<string | null>("");
 
   return (
     <>
@@ -26,8 +27,13 @@ function App() {
         <ImageUploader
           setProcessedImage={setProcessedImage}
           setStatusMessage={setStatusMessage}
+          setCaption={setCaption}
         />
-        <Viewer statusMessage={statusMessage} processedImage={processedImage} />
+        <ResultArea
+          statusMessage={statusMessage}
+          processedImage={processedImage}
+          caption={caption}
+        />
       </div>
     </>
   );

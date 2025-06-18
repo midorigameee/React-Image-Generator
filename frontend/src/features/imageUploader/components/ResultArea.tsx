@@ -7,11 +7,16 @@ import ImageViewer from "../../../components/ImageViewer";
 type Props = {
   statusMessage: string | null;
   processedImage: string | null;
+  caption: string | null;
 };
 
-const Viewer: React.FC<Props> = ({ statusMessage, processedImage }) => {
-  const captionRaw = "#nikon \\n#nikonzf \\n#nikkorz40mmf2";
-  const caption = captionRaw.replace(/\\n/g, "\n");
+const ResultArea: React.FC<Props> = ({
+  statusMessage,
+  processedImage,
+  caption,
+}) => {
+  // const captionRaw = "#nikon \\n#nikonzf \\n#nikkorz40mmf2";
+  // const caption = captionRaw.replace(/\\n/g, "\n");
 
   return (
     <>
@@ -20,11 +25,11 @@ const Viewer: React.FC<Props> = ({ statusMessage, processedImage }) => {
       {processedImage && (
         <>
           <ImageViewer processedImage={processedImage} />
-          <CopyText text={caption} />
+          <CopyText caption={caption} />
         </>
       )}
     </>
   );
 };
 
-export default Viewer;
+export default ResultArea;
