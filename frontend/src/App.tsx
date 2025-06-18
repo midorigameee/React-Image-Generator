@@ -1,8 +1,10 @@
 import "./App.css";
 import ImageUploader from "./features/imageUploader/components/ImageUploader";
 import Titel from "./components/Title";
-import Viewer from "./components/Viewer";
+import Viewer from "./features/imageUploader/components/ResultArea";
 import { useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [processedImage, setProcessedImage] = useState<string | null>(null);
@@ -11,6 +13,15 @@ function App() {
   return (
     <>
       <div className="app-container">
+        <ToastContainer
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          draggable
+        />
         <Titel />
         <ImageUploader
           setProcessedImage={setProcessedImage}
