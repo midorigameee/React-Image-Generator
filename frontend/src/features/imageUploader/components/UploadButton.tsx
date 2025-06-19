@@ -1,4 +1,3 @@
-import React from "react";
 import axios from "axios";
 import type { ExifData } from "../types";
 import "./UploadButton.css";
@@ -10,6 +9,7 @@ type Props = {
   exifData: ExifData | null;
   setStatusMessage: React.Dispatch<React.SetStateAction<string | null>>;
   setProcessedImage: React.Dispatch<React.SetStateAction<string | null>>;
+  setCaption: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const UploadButton: React.FC<Props> = ({
@@ -18,11 +18,11 @@ const UploadButton: React.FC<Props> = ({
   exifData,
   setStatusMessage,
   setProcessedImage,
+  setCaption,
 }) => {
   const handleUpload = async () => {
     if (!selectedFile) return;
 
-    // 念のため再チェック（セキュリティ対策）
     if (
       selectedFile.type !== "image/jpeg" &&
       selectedFile.type !== "image/jpg"
@@ -38,23 +38,29 @@ const UploadButton: React.FC<Props> = ({
 
       const formData = new FormData();
       formData.append("file", resizedBlob, selectedFile.name);
-      formData.append("show_exif", String(showExif)); // "true" または "false"
+      formData.append("show_exif", String(showExif));
       formData.append("exif", JSON.stringify(exifData));
 
-      const response = await axios.post(
-        import.meta.env.VITE_UPLOAD_IMAGE_API_URL,
-        formData,
-        {
+      // 並列リクエスト
+      const [imageRes, captionRes] = await Promise.all([
+        axios.post(import.meta.env.VITE_UPLOAD_IMAGE_API_URL, formData, {
           responseType: "blob",
-        }
-      );
+        }),
+        axios.post(import.meta.env.VITE_CAPTION_API_URL, formData),
+      ]);
 
-      const imageUrl = URL.createObjectURL(response.data);
+      // レスポンスの画像をセットする
+      const imageUrl = URL.createObjectURL(imageRes.data);
       setProcessedImage(imageUrl);
-      setStatusMessage("フレーム画像を作成しました");
+
+      // レスポンスのキャプションをセットする
+      const captionText = captionRes.data.caption || "";
+      setCaption(captionText);
+
+      setStatusMessage("画像とキャプションを取得しました");
     } catch (error) {
-      console.error("画像アップロードに失敗しました:", error);
-      setStatusMessage("画像アップロードに失敗しました");
+      console.error("アップロードに失敗:", error);
+      setStatusMessage("アップロードに失敗しました");
     }
   };
 

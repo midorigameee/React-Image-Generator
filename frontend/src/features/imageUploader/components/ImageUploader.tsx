@@ -9,11 +9,13 @@ import type { ExifData } from "../types";
 type Props = {
   setStatusMessage: React.Dispatch<React.SetStateAction<string | null>>;
   setProcessedImage: React.Dispatch<React.SetStateAction<string | null>>;
+  setCaption: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const ImageUploader: React.FC<Props> = ({
   setStatusMessage,
   setProcessedImage,
+  setCaption,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showExif, setShowExif] = useState<boolean>(true);
@@ -36,6 +38,7 @@ const ImageUploader: React.FC<Props> = ({
           exifData={exifData}
           setStatusMessage={setStatusMessage}
           setProcessedImage={setProcessedImage}
+          setCaption={setCaption}
         />
       </div>
       <div className="toggle-item">

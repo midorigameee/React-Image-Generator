@@ -1,11 +1,5 @@
-.status-message {
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-}
-
 .image-preview {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 
 .image-preview img {

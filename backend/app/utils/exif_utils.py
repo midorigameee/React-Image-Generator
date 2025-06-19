@@ -1,7 +1,7 @@
 from PIL import Image
 from PIL.ExifTags import TAGS
 from datetime import datetime
-from .types import ReqExif
+from ..models.req_exif import ReqExif
 
 def closest_shutter_speed(value):
     # 一般的なシャッタースピードの分母リスト
@@ -32,7 +32,7 @@ def format_exif_value(tag, value):
         return value
 
 
-def prepare_exif(image: Image.Image, exif_from_req: ReqExif) -> str:
+def prepare_exif_dict(image: Image.Image, exif_from_req: ReqExif):
     wanted_tags  = ["Model", "DateTime", "FNumber", "ExposureTime", "ISOSpeedRatings", "FocalLength", "LensModel"]
     exif_dict = {}
 
@@ -51,7 +51,11 @@ def prepare_exif(image: Image.Image, exif_from_req: ReqExif) -> str:
     # ブラウザから入力されたexifを優先させる
     exif_dict = merge_exif(exif_dict, exif_from_req)
 
-    return exif_dict_to_string(exif_dict)
+    return exif_dict
+
+
+def prepare_exif_str(image: Image.Image, exif_from_req: ReqExif) -> str:
+    return exif_dict_to_string(prepare_exif_dict(image, exif_from_req))
 
 
 def exif_dict_to_string(exif: dict) -> str:
