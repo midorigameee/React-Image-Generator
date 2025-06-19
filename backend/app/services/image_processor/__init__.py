@@ -1,1 +1,0 @@
-from .frame_composer import create_framed_image

@@ -1,9 +1,0 @@
-.file-input-form {
-  width: 50%;
-}
-
-input[type="file"] {
-  margin: 1rem 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
