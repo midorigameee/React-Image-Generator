@@ -1,11 +1,11 @@
-from fastapi import FastAPI, File, UploadFile, Form, APIRouter
+from fastapi import FastAPI, File, UploadFile, Form, APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 import io
 from PIL import Image
 import json
 from pydantic import BaseModel
 from app.services.image_processor import frame_composer
-from app.services.image_processor import types
+from app.models import req_exif
 
 
 router = APIRouter()
@@ -22,7 +22,7 @@ async def upload_image(
     # exif JSON文字列をパースしてPydanticモデルに変換
     try:
         exif_dict = json.loads(exif)        # 辞書型に変換（exif_dict["Model"] → Modelがないとエラー）
-        exif_data = types.ReqExif(**exif_dict)    # ReqExifを継承したクラスに変換（exif.Model → Modelがあることが保証されている）
+        exif_data = req_exif.ReqExif(**exif_dict)    # ReqExifを継承したクラスに変換（exif.Model → Modelがあることが保証されている）
         print(f"exif_data:{exif_data}")
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"EXIFデータのパースに失敗しました: {str(e)}")

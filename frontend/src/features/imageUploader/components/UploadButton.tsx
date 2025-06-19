@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import axios from "axios";
 import type { ExifData } from "../types";
 import "./UploadButton.css";
@@ -42,7 +41,7 @@ const UploadButton: React.FC<Props> = ({
       formData.append("show_exif", String(showExif));
       formData.append("exif", JSON.stringify(exifData));
 
-      // 🎯 並列リクエスト（Promise.all）
+      // 並列リクエスト
       const [imageRes, captionRes] = await Promise.all([
         axios.post(import.meta.env.VITE_UPLOAD_IMAGE_API_URL, formData, {
           responseType: "blob",
@@ -50,13 +49,13 @@ const UploadButton: React.FC<Props> = ({
         axios.post(import.meta.env.VITE_CAPTION_API_URL, formData),
       ]);
 
+      // レスポンスの画像をセットする
       const imageUrl = URL.createObjectURL(imageRes.data);
       setProcessedImage(imageUrl);
 
+      // レスポンスのキャプションをセットする
       const captionText = captionRes.data.caption || "";
-      console.log("captionRes.data:", captionRes.data);
-      setCaption(captionText); // キャプション用 state を事前に用意しておく
-      console.log(`captionText : ${captionText}`);
+      setCaption(captionText);
 
       setStatusMessage("画像とキャプションを取得しました");
     } catch (error) {

@@ -1,8 +1,8 @@
 from PIL import Image
 from .image_drawer import draw_image_area_on_frame
 from .text_drawer import draw_text_area_on_frame
-from .exif_utils import prepare_exif
-from .types import ReqExif
+from ...utils.exif_utils import prepare_exif_str
+from ...models.req_exif import ReqExif
 
 
 def create_framed_image(image: Image.Image, is_use_exif: bool, exif_from_req: ReqExif) -> Image.Image:
@@ -23,7 +23,7 @@ def create_framed_image(image: Image.Image, is_use_exif: bool, exif_from_req: Re
     draw_image_area_on_frame(image, image_area_height, frame, frame_width, frame_height)
 
     if is_use_exif:
-        exif = prepare_exif(image, exif_from_req)
+        exif = prepare_exif_str(image, exif_from_req)
 
         print(exif)
         draw_text_area_on_frame(frame, exif)
