@@ -19,4 +19,4 @@ def generate_caption_from_exif(image: Image.Image, is_use_exif: bool, exif_from_
 
 
 def to_hashtag(text):
-    return "#" + text.lower().replace(" ", "").replace("-", "")
+    return "#" + text.lower().replace(" ", "").replace("-", "").replace("/", "").replace(".", "")
