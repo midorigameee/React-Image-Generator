@@ -1,0 +1,63 @@
+.caption-box {
+  position: relative;
+  width: 60%;
+  max-width: 400px;
+  background-color: none;
+  margin: 12px auto;
+}
+
+.caption-text {
+  width: 100%;
+  height: auto;
+  max-height: 100px;
+  min-height: 60px;
+  padding: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  border-radius: 6px;
+  resize: none;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #333;
+  font-family: sans-serif;
+  overflow-y: auto;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+
+  /* スクロールバーを控えめに */
+  scrollbar-width: thin; /* Firefox用 */
+  scrollbar-color: #ccc transparent; /* Firefox用 */
+}
+
+/* Chrome, Edge, Safari */
+.caption-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.caption-text::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.caption-text::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.caption-copy-button {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 11px;
+  padding: 4px 8px;
+  background-color: #666;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.caption-copy-button:hover {
+  background-color: #444;
+  opacity: 1;
+}
