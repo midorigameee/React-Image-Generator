@@ -7,13 +7,9 @@ import json
 from app.services.caption_generatior import generate_caption_from_exif
 from app.models import req_exif
 
+
 router = APIRouter()
 
-# class ReqExif(BaseModel):
-#     Model: Optional[str]
-#     LensModel: Optional[str]
-#     DateTime: Optional[str]
-#     # 必要に応じて他の項目も追加
 
 @router.post("/generate-caption")
 async def generate_caption(
