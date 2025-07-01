@@ -1,0 +1,18 @@
+name: Restrict PR to master from develop only
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  restrict_pr_source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if PR is not from develop
+        run: |
+          echo "PR from ${{ github.head_ref }} to ${{ github.base_ref }}"
+          if [ "${{ github.head_ref }}" != "develop" ]; then
+            echo "❌ PR to master must come from develop branch only."
+            exit 1
+          fi
