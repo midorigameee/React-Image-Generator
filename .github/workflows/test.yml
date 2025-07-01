@@ -32,5 +32,5 @@ jobs:
         env:
           PYTHONPATH: .
         run: |
-          source /home/devuser/venv/bin/activate
+          source venv/bin/activate
           env PYTHONPATH=. pytest
